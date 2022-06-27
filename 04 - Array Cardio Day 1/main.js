@@ -17,6 +17,8 @@
         { first: 'Lise', last: 'Meitner', year: 1878, passed: 1968 },
         { first: 'Hanna', last: 'Hammarström', year: 1829, passed: 1909 }
       ];
+      console.log(inventors)
+
   
       const people = [
         'Bernhard, Sandra', 'Bethea, Erin', 'Becker, Carl', 'Bentsen, Lloyd', 'Beckett, Samuel', 'Blake, William', 'Berger, Ric', 'Beddoes, Mick', 'Beethoven, Ludwig',
@@ -28,74 +30,56 @@
       
       // Array.prototype.filter()
       // 1. Filter the list of inventors for those who were born in the 1500's
-  let inventorsBorn1500 = inventors.filter( inventor => {
-    if( inventor['year'] >= 1500 && inventor['year'] < 1600 ) {
-      return inventor
-    }
-  } )
-  console.log(inventorsBorn1500)
+      const investorsIn15s = inventors.filter( inventor => (inventor.year >= 1500 && inventor.year <= 1599) ? inventor : '' )
+      console.table(investorsIn15s)
+
+
       // Array.prototype.map()
       // 2. Give us an array of the inventors first and last names
-  firstAndLastName = inventors.map( inventor => `${inventor['first']} ${inventor['last']}` )
-  console.table(firstAndLastName)
+      const firstAndLastNames = inventors.map( inventor => `${inventor.first} ${inventor.last}` )
+      console.table(firstAndLastNames)
   
       // Array.prototype.sort()
       // 3. Sort the inventors by birthdate, oldest to youngest
       //get age of each
-  let ageOfEach = inventors.map( inventor => inventor['passed'] - inventor['year'] );
-  let ordered = ageOfEach.sort( (firstPerson, secondPerson) => firstPerson.year > secondPerson.year ? 1 : -1  )
-  console.table(ordered)
+      const sortByBirthDate = inventors.sort( (a,b) => (a.year - a.passed) - (b.year - b.passed) )
+      console.table(sortByBirthDate)
+
 
   
   // Array.prototype.reduce()
   // 4. How many years did all the inventors live all together?
   //get sum of years lived by individual inventor
-  inventors.forEach( (inventor) => inventor['age'] = inventor['passed'] - inventor['year'] );
-  //get total sum of years lived by all inventors
-  let sumAge = 0
-    inventors.forEach( (inventor) => {
-      sumAge += inventor['age']
-      }
-    )
-  console.log(sumAge)
-  
-    // 5. Sort the inventors by years lived
-    const sortAge = inventors.sort(
-      (a,b) => {
-        lastGuy = a['age'];
-        nextGuy = b['age'];
-        return lastGuy > nextGuy ? -1 : 1
-      }
-    )
-    console.table(inventors)
+  const totalYears = inventors.reduce( (total, inventorAge) => {
+    let age = inventorAge.passed - inventorAge.year
+    return total + age
+  }, 0 )
+  console.log(totalYears)
+  const age = inventors.map( a => a.passed - a.year )
+  console.log(age)
   
     // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
     // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
-      const category = document.querySelector('.mw-category');
-      const links = Array.from( category.querySelectorAll('a') );
-      const de = links
-                      .map( link => link.textContent )
-                      .filter( streetName => streetName.includes('de') )
-  
+    const category = document.querySelectorAll('.mw-category a')
+    const de = (Array.from(category))
+                              .map( boulevard => boulevard.textContent )
+                              .filter( boulevard => boulevard.includes('de') )
+    console.log(de)  
     // 7. sort Exercise
     // Sort the people alphabetically by last name
-    const alpha = people.sort(
-      (a,b) => {
-        const [aLast, aFirst] = a.split(', ');
-        const [bLast, bFirst] = b.split(', ');
-        return aLast > bLast ? 1 : -1;
-      }
-    )
-  
+    const sortByLastName = people.sort( (a, b) => {
+      const [aFirst, aLast] = a.split(', ')
+      const [birst, bLast] = b.split(', ')
+      return bLast > aLast ? 1 : -1
+
+    } )
+    console.table(sortByLastName)
+
     // 8. Reduce Exercise
     // Sum up the instances of each of these
-    const data = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck' ];
-    const transport = data.reduce(
-      (obj, item) => {
-        if(!obj[item]) {
-          obj[item] = 0;
-        }
-        obj[item++];
-        return obj
-      }, {} 
-    )
+    const data = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck', 'pogostick'];
+    const sumOfInstance = data.reduce( (obj, item) => {
+      !obj[item] ? obj[item] = 0 : obj[item]++
+      return obj
+    }, {} )
+    console.log(sumOfInstance)
